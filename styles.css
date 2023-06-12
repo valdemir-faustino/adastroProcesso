@@ -1,0 +1,67 @@
+/* Estilos para o formulário */
+body {
+  font-family: Arial, sans-serif;
+  background-color: goldenrod;
+ 
+}
+
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #333333;
+}
+
+ul{
+text-align: center;
+}
+
+form {
+  margin-top: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333333;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+}
+
+input[type="submit"] {
+  background-color: #d8842bda;
+  color: black;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #555555;
+}
+
+div {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+ background-color:white;
+}  
+
+
+  
+
+

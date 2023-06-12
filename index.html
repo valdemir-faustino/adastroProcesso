@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulário Completo</title>
+  <link rel="stylesheet" href="styles.css">
+    
+</head>
+<body>  
+    <h1>Controle de processo</h1>  
+  <form action="index.html">
+    <a href="exibirDados.html">Ir par lista de processos</a>
+  </form>
+  
+  <form id="myForm">
+    <label for="name">Processo:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="tipo">Tipo:</label>
+    <input type="text" id="tipo" name="tipo" required>
+     
+    <label for="descricao">Descrição:</label>
+    <input type="text" id="descricao" name="descricao" required>
+
+    <label for="status">Status:</label>
+    <select id="status" name="status" required>
+      <option value="">Selecione</option>
+      <option value="analise">Análise</option>
+      <option value="concluso">Concluso</option>
+      <option value="other">Outro</option>
+    </select>
+
+    <label for="origem">Origem:</label>
+    <select id="origem" name="origem" required>
+      <option value="">Selecione</option>
+      <option value="adm">Administração</option>
+      <option value="seduc">Educação</option>
+      <option value="inf">Infra</option>
+    </select>
+
+    <input type="submit" id="myButton" value="Cadastrar Processos">
+  </form>
+  
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="firebaseConfig.js"></script>
+  <script src="enviarFormulario.js"></script>
+  <script src="exibirDados.js"></script>
+  
+  <script>
+    // Referência ao banco de dados do Firebase
+    var database = firebase.database();
+
+    // Referência à lista <ul> no HTML
+    var dataList = document.getElementById("dataList");
+
+    // Função para buscar e exibir os dados do Firebase
+    function exibirDadosDoFirebase() {
+      // Limpar a lista
+      dataList.innerHTML = "";
+
+      // Referência ao nó "formData" no banco de dados
+      var formDataRef = database.ref("formData");
+
+      // Evento "value" para buscar os dados
+      formDataRef.on("value", function(snapshot) {
+        // Iterar sobre os dados do snapshot
+        snapshot.forEach(function(childSnapshot) {
+          // Obter os dados de cada filho
+          var childData = childSnapshot.val();
+
+          // Criar um elemento <li> para cada dado
+          var listItem = document.createElement("li");
+          listItem.textContent = "Nome: " + childData.name + ", Tipo: " + childData.tipo + ", Descrição: " + childData.descricao + ", Status: " + childData.status + ", Origem: " + childData.origem;
+
+
+          // Adicionar o elemento <li> à lista <ul>
+          dataList.appendChild(listItem);
+        });
+      });
+    }
+
+    // Chamar a função para exibir os dados do Firebase
+    exibirDadosDoFirebase();
+  </script>
+</body>
+</html>
+
+
+
+    
+
+
+
