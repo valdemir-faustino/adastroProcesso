@@ -17,29 +17,42 @@ function exibirDadosDoFirebase() {
       var newRow = document.createElement("tr");
 
       // Criar células de dados para cada valor
-      var nameCell = document.createElement("td");
-      nameCell.textContent = childData.name;
-      var tipoCell = document.createElement("td");
-      tipoCell.textContent = childData.tipo;
-      var descricaoCell = document.createElement("td");
-      descricaoCell.textContent = childData.descricao;
+      var idCell = document.createElement("td");
+      idCell.textContent = childData.id;
+      var modalidadeCell = document.createElement("td");
+      modalidadeCell.textContent = childData.modalidade;
+      var objetoCell = document.createElement("td");
+      objetoCell.textContent = childData.objeto;
       var statusCell = document.createElement("td");
       statusCell.textContent = childData.status;
       var origemCell = document.createElement("td");
       origemCell.textContent = childData.origem;
+      var publicacaoCell = document.createElement("td");
+      publicacaoCell.textContent = childData.publicacao;
+      var inicioCell = document.createElement("td");
+      inicioCell.textContent = childData.inicio;
+      var fimCell = document.createElement("td");
+      fimCell.textContent = childData.fim;
 
       // Adicionar as células à linha
-      newRow.appendChild(nameCell);
-      newRow.appendChild(tipoCell);
-      newRow.appendChild(descricaoCell);
+      newRow.appendChild(idCell);
+      newRow.appendChild(modalidadeCell);
+      newRow.appendChild(objetoCell);
       newRow.appendChild(statusCell);
       newRow.appendChild(origemCell);
+      newRow.appendChild(publicacaoCell);
+      newRow.appendChild(inicioCell);
+      newRow.appendChild(fimCell);
 
       // Adicionar a linha ao corpo da tabela
       dataList.appendChild(newRow);
     });
   });
 }
+
+
+
+
 
 
 

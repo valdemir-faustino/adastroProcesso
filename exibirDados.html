@@ -6,89 +6,116 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulário Completo</title>
   <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./tabela.css">  
+  <link rel="stylesheet" href="./tabela.css">
 </head>
 <body>
   <!-- Segundo formulário para exibir a lista -->
-  <form id="listForm">  
-    
-    <a href="index.html">Ir para Cadastro de processos</a>
+  <form id="listForm">
     <h2>Lista de processos</h2>
+    <a href="index.html">Ir para Cadastro de processos</a><br><br>
+    <a href="editarDados.html">Editar</a> <br><br>   
     <table class="my-table">
       <thead>
         <tr>
-          <th>Nome</th>
-          <th>Tipo</th>
-          <th>Descrição</th>
-          <th>status</th>
+          <th>Id</th>
+          <th>Modalidade</th>
+          <th>Objeto</th>
+          <th>Status</th>
           <th>Origem</th>
+          <th>Publicação/Extrato Diário Oficial</th>
+          <th>Início</th>
+          <th>Fim</th>
         </tr>
       </thead>
       <tbody id="dataList"></tbody>
     </table>
-    
   </form>
-  
+
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="firebaseConfig.js"></script>  
+  <script src="firebaseConfig.js"></script>
   <script src="exibirDados.js"></script>
-  
-  <script>
-    // Referência ao banco de dados do Firebase
-    var database = firebase.database();
+  <script>  
+  // Verificar o prazo e exibir alerta se necessário
+  function verificarPrazo(fimData, inicioData) {
+    var fim = new Date(fimData);
+    var inicio = new Date(inicioData);
+    var umMesEmMilissegundos = 30 * 24 * 60 * 60 * 1000; // Um mês em milissegundos
+    var prazo = fim - inicio; // Diferença entre as datas em milissegundos
+    return prazo <= umMesEmMilissegundos;
+  }
 
-    // Referência ao corpo da tabela no HTML
-    var dataList = document.getElementById("dataList");
+  // Função para buscar e exibir os dados do Firebase
+  function exibirDadosDoFirebase() {
+    // Limpar o corpo da tabela
+    dataList.innerHTML = "";
 
-    // Função para buscar e exibir os dados do Firebase
-    function exibirDadosDoFirebase() {
-      // Limpar o corpo da tabela
-      dataList.innerHTML = "";
+    // Referência ao nó "formData" no banco de dados
+    var formDataRef = database.ref("formData");
 
-      // Referência ao nó "formData" no banco de dados
-      var formDataRef = database.ref("formData");
+    // Evento "value" para buscar os dados
+    formDataRef.on("value", function(snapshot) {
+      // Iterar sobre os dados do snapshot
+      snapshot.forEach(function(childSnapshot) {
+        // Obter os dados de cada filho
+        var childData = childSnapshot.val();
 
-      // Evento "value" para buscar os dados
-      formDataRef.on("value", function(snapshot) {
-        // Iterar sobre os dados do snapshot
-        snapshot.forEach(function(childSnapshot) {
-          // Obter os dados de cada filho
-          var childData = childSnapshot.val();
+        // Criar uma nova linha na tabela
+        var newRow = document.createElement("tr");
 
-          // Criar uma nova linha na tabela
-          var newRow = document.createElement("tr");
+        // Criar células de dados para cada valor
+        var idCell = document.createElement("td");
+        idCell.textContent = childData.id;
+        var modalidadeCell = document.createElement("td");
+        modalidadeCell.textContent = childData.modalidade;
+        var objetoCell = document.createElement("td");
+        objetoCell.textContent = childData.objeto;
+        var statusCell = document.createElement("td");
+        statusCell.textContent = childData.status;
+        var origemCell = document.createElement("td");
+        origemCell.textContent = childData.origem;
+        var publicacaoCell = document.createElement("td");
+        publicacaoCell.textContent = childData.publicacao;
+        var inicioCell = document.createElement("td");
+        inicioCell.textContent = childData.inicio;
+        var fimCell = document.createElement("td");
+        fimCell.textContent = childData.fim;
 
-          // Criar células de dados para cada valor
-          var nameCell = document.createElement("td");
-          nameCell.textContent = childData.name;
-          var tipoCell = document.createElement("td");
-          tipoCell.textContent = childData.tipo;
-          var descricaoCell=document.createElement("td");
-          descricaoCell.textContent = childData.descricao;
-          var statusCell=document.createElement("td");
-          statusCell.textContent = childData.status;
-          var origemCell=document.createElement("td");
-          origemCell.textContent = childData.origem;
-          
+        // Adicionar as células à linha
+        newRow.appendChild(idCell);
+        newRow.appendChild(modalidadeCell);
+        newRow.appendChild(objetoCell);
+        newRow.appendChild(statusCell);
+        newRow.appendChild(origemCell);
+        newRow.appendChild(publicacaoCell);
+        newRow.appendChild(inicioCell);
+        newRow.appendChild(fimCell);
 
-          // Adicionar as células à linha
-          newRow.appendChild(nameCell);
-          newRow.appendChild(tipoCell);
-          newRow.appendChild(descricaoCell);
-          newRow.appendChild(statusCell);
-          newRow.appendChild(origemCell);
+        // Verificar o prazo e exibir alerta se necessário
+        var prazoCurto = verificarPrazo(childData.fim, childData.inicio);
+        if (prazoCurto) {
+          newRow.classList.add("short-deadline");
+          alert("ATENÇÃO!! O prazo para concluir o processo com Objeto \"" + childData.objeto + "\" está finalizando. Falta menos de um mês!");
+        }
 
-          // Adicionar a linha ao corpo da tabela
-          dataList.appendChild(newRow);
-        });
+        // Adicionar a linha ao corpo da tabela
+        dataList.appendChild(newRow);
       });
-    }
+    });
+  }
 
-    // Chamar a função para exibir os dados do Firebase
+  // Chamada para exibirDadosDoFirebase fora da função exibirDadosDoFirebase
+  window.onload = function() {
     exibirDadosDoFirebase();
-  </script>
+  };
+</script>
+
 </body>
 </html>
+
+
+
+
+
 
 

@@ -6,23 +6,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulário Completo</title>
   <link rel="stylesheet" href="styles.css">
-    
 </head>
-<body>  
-    <h1>Controle de processo</h1>  
-  <form action="index.html">
-    <a href="exibirDados.html">Ir par lista de processos</a>
-  </form>
+<body>
   
   <form id="myForm">
-    <label for="name">Processo:</label>
-    <input type="text" id="name" name="name" required>
-
-    <label for="tipo">Tipo:</label>
-    <input type="text" id="tipo" name="tipo" required>
+    <div>
+      <h1>Controle de processo</h1>
+      <table class="my-table"></table>
+      <a href="exibirDados.html">Ir para lista de processos</a><br><br>
+      <a href="editarDados.html">Editar</a><br><br>
      
-    <label for="descricao">Descrição:</label>
-    <input type="text" id="descricao" name="descricao" required>
+    </div>
+    <label for="modalidade">Modalidade:</label>
+    <select id="modalidade" name="modalidade" required>
+      <option value="">Selecione</option>
+      <option value="Aditivo Dispensa de Licitacao">Aditivo Dispensa de Licitação</option>
+      <option value="Aditivo Pregao Eletronico">Aditivo Pregão Eletrônico</option>
+      <option value="Aditivo Pregao Presencial">Aditivo Pregão Presencial</option>
+      <option value="Aditivo Tomada de Preco">Aditivo Tomada de Preço</option>
+      <option value="Carta Convite">Carta Convite</option>
+      <option value="Chamada Publica">Chamada Pública</option>
+      <option value="Concorrencia">Concorrência</option>
+      <option value="Consulta">Consulta</option>
+      <option value="Concurso">Concurso</option>
+      <option value="Dispensa de Licitacao">Dispensa de Licitação</option>
+      <option value="Inexibilidade">Inexibilidade</option>
+      <option value="Leilao">Leilão</option> 
+      <option value="Pregao Eletronico">Pregão Eletrônico</option>
+      <option value="Pregao Presencial">Pregão Presencial</option>
+      <option value="Tomade de preco">Tomada de Preço</option>
+    </select>
+
+    <label for="objeto">Objeto:</label>
+    <input type="text" id="objeto" name="objeto" required>
 
     <label for="status">Status:</label>
     <select id="status" name="status" required>
@@ -32,61 +48,87 @@
       <option value="other">Outro</option>
     </select>
 
-    <label for="origem">Origem:</label>
+    <label for="origem">Órgão/Secretaria:</label>
     <select id="origem" name="origem" required>
       <option value="">Selecione</option>
-      <option value="adm">Administração</option>
-      <option value="seduc">Educação</option>
-      <option value="inf">Infra</option>
+      <option value="Administracao">Administração</option>
+      <option value="Educacao">Educação</option>
+      <option value="Fazanda">Fazenda</option>
+      <option value="Infra Estrutura">Infraestrutura</option>
+      <option value="Meio Ambiente">Meio Ambiente</option> 
+      <option value="Saude">Saude</option>
     </select>
 
+    <label for="publicacao">Publicacao/Extrato Diario Oficial:</label>
+    <input type="date" id="publicacao" name="publicacao" required>  
+
+    <label for="inicio">Início do Processo:</label>
+    <input type="date" id="inicio" name="inicio" required>
+
+    <label for="fim">Fim do Processo:</label>
+    <input type="date" id="fim" name="fim" required>
+
+    <input type="hidden" id="id" name="id">
     <input type="submit" id="myButton" value="Cadastrar Processos">
+    <div id="notification"></div>
   </form>
-  
+
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
   <script src="firebaseConfig.js"></script>
   <script src="enviarFormulario.js"></script>
-  <script src="exibirDados.js"></script>
-  
   <script>
-    // Referência ao banco de dados do Firebase
-    var database = firebase.database();
+    var form = document.getElementById("myForm");
+    var idInput = document.getElementById("id");
+    var currentId = 1;
 
-    // Referência à lista <ul> no HTML
-    var dataList = document.getElementById("dataList");
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
 
-    // Função para buscar e exibir os dados do Firebase
-    function exibirDadosDoFirebase() {
-      // Limpar a lista
-      dataList.innerHTML = "";
+      // Obter os valores dos campos
+      var modalidade = document.getElementById("modalidade").value;
+      var objeto = document.getElementById("objeto").value;
+      var status = document.getElementById("status").value;
+      var origem = document.getElementById("origem").value;
+      var publicacao = document.getElementById("publicacao").value;
+      var inicio = document.getElementById("inicio").value;
+      var fim = document.getElementById("fim").value;
 
-      // Referência ao nó "formData" no banco de dados
-      var formDataRef = database.ref("formData");
+      // Validar os campos
+      if (modalidade === "" || objeto === "" || status === "" || origem === "" || publicacao === "" || inicio === "" || fim === "") {
+        alert("Por favor, preencha todos os campos obrigatórios.");
+        return;
+      }
 
-      // Evento "value" para buscar os dados
-      formDataRef.on("value", function(snapshot) {
-        // Iterar sobre os dados do snapshot
-        snapshot.forEach(function(childSnapshot) {
-          // Obter os dados de cada filho
-          var childData = childSnapshot.val();
+      // Gerar o ID auto incremento
+      var id = currentId++;
 
-          // Criar um elemento <li> para cada dado
-          var listItem = document.createElement("li");
-          listItem.textContent = "Nome: " + childData.name + ", Tipo: " + childData.tipo + ", Descrição: " + childData.descricao + ", Status: " + childData.status + ", Origem: " + childData.origem;
+      // Preencher o valor do campo de entrada de ID
+      idInput.value = id;
 
+      // Fazer o processamento necessário com os dados do formulário
+      // ...
 
-          // Adicionar o elemento <li> à lista <ul>
-          dataList.appendChild(listItem);
-        });
-      });
-    }
-
-    // Chamar a função para exibir os dados do Firebase
-    exibirDadosDoFirebase();
+      // Limpar os campos após o envio
+      form.reset();
+    });
   </script>
+
+  <footer>
+    <p>Desenvolvido por Val Faustino, aluno de TI da Unicesumar</p>
+  </footer>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
 
 
 

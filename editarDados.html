@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Dados</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./tabela.css">
+</head>
+<body>
+  <!-- Segundo formulário para exibir a lista -->
+  <form id="listForm">
+    <h2>Editar Dados do Processo</h2>
+    <a href="index.html">Ir para Cadastro de processos</a><br><br>
+    <a href="exibirDados.html">Exibir Dados</a> <br><br>   
+    <table class="my-table">
+      <!-- Adicione sua tabela de processos aqui -->
+    </table>
+  </form>
+
+  <form id="editForm">
+    <label for="processId">Selecione o processo:</label>
+    <select id="processId" name="processId" required>
+      <option value="">Selecione</option>
+      <!-- Opções de processos carregadas dinamicamente usando JavaScript -->
+    </select>
+
+    <label for="modalidade">Modalidade:</label>
+    <select id="modalidade" name="modalidade" required>
+      <option value="">Selecione</option>
+      <option value="Aditivo Dispensa de Licitacao">Aditivo Dispensa de Licitação</option>
+      <option value="Aditivo Pregao Eletronico">Aditivo Pregão Eletrônico</option>
+      <option value="Aditivo Pregao Presencial">Aditivo Pregão Presencial</option>
+      <option value="Aditivo Tomada de Preco">Aditivo Tomada de Preço</option>
+      <option value="Carta Convite">Carta Convite</option>
+      <option value="Chamada Publica">Chamada Pública</option>
+      <option value="Concorrencia">Concorrência</option>
+      <option value="Consulta">Consulta</option>
+      <option value="Concurso">Concurso</option>
+      <option value="Dispensa de Licitacao">Dispensa de Licitação</option>
+      <option value="Inexibilidade">Inexibilidade</option>
+      <option value="Leilao">Leilão</option>
+      <option value="Pregao Eletronico">Pregão Eletrônico</option>
+      <option value="Pregao Presencial">Pregão Presencial</option>
+      <option value="Tomada de Preco">Tomada de Preço</option>
+    </select>
+
+    <label for="objeto">Objeto:</label>
+    <input type="text" id="objeto" name="objeto" required>
+
+    <label for="status">Status:</label>
+    <select id="status" name="status" required>
+      <option value="">Selecione</option>
+      <option value="analise">Análise</option>
+      <option value="concluso">Concluso</option>
+      <option value="other">Outro</option>
+    </select>
+
+    <label for="origem">Órgão/Secretaria:</label>
+    <select id="origem" name="origem" required>
+      <option value="">Selecione</option>
+      <option value="Administracao">Administração</option>
+      <option value="Educacao">Educação</option>
+      <option value="Fazanda">Fazenda</option>
+      <option value="Infra Estrutura">Infraestrutura</option>
+      <option value="Meio Ambiente">Meio Ambiente</option>
+      <option value="Saude">Saúde</option>
+    </select>
+
+    <label for="publicacao">Data de publicação:</label>
+    <input type="date" id="publicacao" name="publicacao" required>
+
+    <label for="inicio">Data de início:</label>
+    <input type="date" id="inicio" name="inicio" required>
+
+    <label for="fim">Data de fim:</label>
+    <input type="date" id="fim" name="fim" required>
+
+    <button type="submit">Editar</button>
+  </form>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-database.js"></script>
+  <script src="editarDados.js"></script>
+  
+</body>
+</html>
+
+
+
+
+
